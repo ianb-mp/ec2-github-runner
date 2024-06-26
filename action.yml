@@ -43,7 +43,7 @@ outputs:
     description: 'The ID of command invocation.'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/megaport/esd-ec2-github-runner:sha-1f2ee64'
+  image: 'docker://ghcr.io/ianb-mp/ec2-github-runner:latest'
   args:
     - ${{ inputs.mode }}
     - ${{ inputs.ec2-image-id }}

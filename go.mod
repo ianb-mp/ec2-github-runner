@@ -1,4 +1,4 @@
-module github.com/megaport/esd-ec2-github-runner
+module github.com/ianb-mp/ec2-github-runner
 
 go 1.22.2
 
