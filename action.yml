@@ -1,0 +1,58 @@
+name: 'AWS EC2 Manager'
+description: 'Launch, execute command, or destroy an AWS EC2 instance.'
+inputs:
+  mode:
+    description: 'Operation mode: start, command, stop'
+    required: true
+  ec2-image-id:
+    description: 'AMI ID for the instance (required for start mode)'
+    required: false
+  subnet-id:
+    description: 'Subnet ID for the instance (required for start mode)'
+    required: false
+  security-group-id:
+    description: 'Security group ID for the instance (required for start mode)'
+    required: false
+  iam-role-name:
+    description: 'IAM role name for the instance profile (optional for start mode)'
+    required: false
+  ec2-instance-type:
+    description: 'Instance type (e.g., t3.micro) (optional for start mode)'
+    required: false
+    default: 't3.micro'
+  user-data:
+    description: 'User data script to configure the instance (optional for start mode)'
+    required: false
+  tag-specifications:
+    description: 'Tag specifications for the instance in JSON format (optional for start mode)'
+    required: false
+  ec2-instance-id:
+    description: 'EC2 instance ID (required for command and stop modes)'
+    required: false
+  command:
+    description: 'Command to execute on the instance (required for command mode)'
+    required: false
+  command-max-wait-secs:
+    description: 'Time to wait for command to complete (optional for command mode)'
+    required: false
+    default: 300
+outputs:
+  ec2-instance-id:
+    description: 'The ID of the EC2 instance that was started.'
+  command-id:
+    description: 'The ID of command invocation.'
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/megaport/esd-ec2-github-runner:sha-1f2ee64'
+  args:
+    - ${{ inputs.mode }}
+    - ${{ inputs.ec2-image-id }}
+    - ${{ inputs.subnet-id }}
+    - ${{ inputs.security-group-id }}
+    - ${{ inputs.iam-role-name }}
+    - ${{ inputs.ec2-instance-type }}
+    - ${{ inputs.user-data }}
+    - ${{ inputs.tag-specifications }}
+    - ${{ inputs.ec2-instance-id }}
+    - ${{ inputs.command }}
+    - ${{ inputs.command-max-wait-secs }}
