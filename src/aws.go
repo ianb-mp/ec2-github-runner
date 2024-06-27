@@ -158,10 +158,12 @@ func ExecuteCommandOnEC2Instance(ctx context.Context, action *githubactions.Acti
 	action.Infof("ResponseCode: %d", commandInvocationDetails.ResponseCode)
 	action.Infof("Status: %s", commandInvocationDetails.Status)
 	action.Infof("StdError: %s", *commandInvocationDetails.StandardErrorContent)
-	if len(*commandInvocationDetails.StandardOutputContent) < 1000 {
-		action.Infof("StdOutput: %s", *commandInvocationDetails.StandardOutputContent)
-	} else {
+	if len(*commandInvocationDetails.StandardOutputContent) > 1000 {
+		action.Infof("StdOutput: %s...", (*commandInvocationDetails.StandardOutputContent)[:1000])
 		action.Infof("(enable debug to see full output)")
+		action.Debugf("StdOutput: %s", *commandInvocationDetails.StandardOutputContent)
+	} else {
+		action.Infof("StdOutput: %s", *commandInvocationDetails.StandardOutputContent)
 	}
 	action.EndGroup()
 
