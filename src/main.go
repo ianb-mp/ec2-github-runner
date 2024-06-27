@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -16,9 +15,6 @@ import (
 func main() {
 
 	action := githubactions.New()
-	if len(os.Args) < 2 {
-		action.Fatalf("no arguments supplied")
-	}
 
 	err := getInputs(action)
 	if err != nil {
@@ -29,6 +25,9 @@ func main() {
 func getInputs(action *githubactions.Action) error {
 
 	mode := action.GetInput("mode")
+	if mode == "" {
+		return fmt.Errorf("Required input 'mode' is missing.")
+	}
 	ec2AmiId := action.GetInput("ec2-image-id")
 	subnetId := action.GetInput("subnet-id")
 	securityGroupId := action.GetInput("security-group-id")
