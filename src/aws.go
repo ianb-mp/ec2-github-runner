@@ -176,19 +176,8 @@ func GetCommandInvocationDetails(ctx context.Context, action *githubactions.Acti
 		CommandId:  aws.String(commandId),
 		InstanceId: aws.String(ec2InstanceId),
 	}
-
-	for elapsed := 0; elapsed < maxWaitTime; elapsed += 5 {
-		resp, err := ssmClient.GetCommandInvocation(ctx, getCommandParams)
-		if err == nil {
-			return resp, nil
-		}
-		if err.Error() != "InvocationDoesNotExist" {
-			return nil, fmt.Errorf("error getting command invocation details: %v", err)
-		}
-		time.Sleep(5 * time.Second)
-	}
-
-	return nil, fmt.Errorf("timeout waiting for command invocation details")
+	waiter := ssm.NewCommandExecutedWaiter(ssmClient)
+	return waiter.WaitForOutput(ctx, getCommandParams, time.Duration(maxWaitTime)*time.Second)
 }
 
 // IsSSMAgentRegistered checks if the SSM agent is registered and online for a given EC2 instance.
