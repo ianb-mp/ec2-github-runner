@@ -59,7 +59,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Start EC2 instance
-      uses: your-github-username/your-repo-name@main
+      uses: https://github.com/ianb-mp/ec2-github-runner@v2
       id: start_ec2
       with:
         mode: start
@@ -74,14 +74,14 @@ jobs:
         tag-specifications: '[{"ResourceType":"instance","Tags":[{"Key":"Name","Value":"MyInstance"}]}]'
 
     - name: Execute command on EC2 instance
-      uses: your-github-username/your-repo-name@main
+      uses: https://github.com/ianb-mp/ec2-github-runner@v2
       with:
         mode: command
         ec2-instance-id: ${{ steps.start_ec2.outputs.ec2-instance-id }}
         command: echo "This is a command executed via SSM"
 
     - name: Stop EC2 instance
-      uses: your-github-username/your-repo-name@main
+      uses: https://github.com/ianb-mp/ec2-github-runner@v2
       with:
         mode: stop
         ec2-instance-id: ${{ steps.start_ec2.outputs.ec2-instance-id }}
@@ -95,20 +95,11 @@ To use this GitHub Action, the following IAM permissions are required for each m
 |-----------|---------------------------------------------------------------------------------------------------|
 | `start`   | `ec2:RunInstances`, `ec2:DescribeInstances`, `iam:ListInstanceProfiles`, `iam:CreateInstanceProfile`, `iam:AddRoleToInstanceProfile`, `iam:PassRole` |
 | `command` | `ssm:SendCommand`, `ssm:ListCommandInvocations`, `ssm:DescribeInstanceInformation`                |
-| `stop`    | `ec2:TerminateInstances`  
+| `stop`    | `ec2:TerminateInstances` |
 
-
-## Development
-
-Run npm commands with Podman/Docker like this:
-```
-$ podman run --rm -t \
-  -v <path to repo>:/repo \
-  -w /repo \
-  docker.io/library/node:current-slim \
-  npm run lint
-```
 
 ## Credit
 
-Based on https://github.com/machulav/ec2-github-runner
+Inspired by https://github.com/machulav/ec2-github-runner
+
+With some help from ChatGPT :wink:
